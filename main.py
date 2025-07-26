@@ -22,4 +22,4 @@ else:
     print("Error:", response.status_code, response.text)
 
 
-print(f"The weather in Tel Aviv right now is {data['weather'][0]['main']}")
+print(f"The weather in Tel Aviv right now is...")
