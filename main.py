@@ -24,3 +24,7 @@ else:
 
 
 st.write(f"the weather in Tel Aviv is {data['weather'][0]['main']}")
+
+headers = {"Authorization": f"Bearer {api_key}"}
+resp = requests.post(url,
+                     headers=headers, json={"model": "...", "input": "Hi"})
