@@ -8,7 +8,7 @@ st.title("I'm Only Happy When It X")
 api_key = "c0405f59ce8122b64146c3258e531ee0"
 url = "http://api.openweathermap.org/data/2.5/weather"
 params = {
-    "q": "London",
+    "q": "Tel Aviv",
     "appid": api_key,
     "units": "metric"
 }
@@ -20,3 +20,6 @@ if response.status_code == 200:
     print(json.dumps(data, indent=2))  # pretty-print the full JSON
 else:
     print("Error:", response.status_code, response.text)
+
+
+print(f"The weather in Tel Aviv right now is {data['weather'][0]['main']}")
