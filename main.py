@@ -33,6 +33,7 @@ def weather(data): #get weather details across all
     temp = data["main"]["temp"]
     feels_like = data["main"]["feels_like"]
     wind_speed = data["wind"]["speed"]
+    humidity = data["main"]["humidity"]
     icon_code = data["weather"][0]["icon"]
     icon_url = f"http://openweathermap.org/img/wn/{icon_code}@2x.png"
 
@@ -64,8 +65,9 @@ def weather(data): #get weather details across all
 
 
         st.markdown(f"Sky: {weather_description}")
-        st.markdown(f"{temp}°C", help=f"Feels like {feels_like}°C!")
+        st.markdown(f"Temp: {temp}°C", help=f"Feels like {feels_like}°C!")
         st.markdown(f"Wind: {wind_speed} m/s")
+        st.markdown(f"Humidity: {humidity} %")
         st.markdown(f"Odds of Rain: can't afford that API key")
         st.markdown(f"Odds of Aliens: Low",help="But never zero!")
         loc_df = pd.DataFrame({
