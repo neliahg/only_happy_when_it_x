@@ -140,6 +140,7 @@ def ipweather():  #based on ip address
 
     if response.status_code == 200:
         data = response.json()
+        st.write("IP address is Streamlit servers... my bad!")
         weather(data)
         return data
     else:
@@ -162,7 +163,7 @@ with col2:
         with button_col2:
             feeling_lucky = st.button("I'm feeling lucky...", use_container_width=True)
         with button_col3:
-            go_home = st.button("Go Home", use_container_width=True)
+            go_home = st.button("Go Home*", use_container_width=True)
 with col3:
     st.write("")#spaaaaaaace
 
@@ -178,6 +179,6 @@ elif feeling_lucky:
         time.sleep(3)
     rand_weather()
 elif go_home:
-    with st.spinner(f"Searching Weather X for a **YOUR** IP location..."):
+    with st.spinner(f"Searching Weather X based on IP address..."):
         time.sleep(3)
     ipweather()
