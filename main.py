@@ -63,9 +63,11 @@ def weather(data): #get weather details across all
 
 
 
-        st.markdown(f"☁️ Weather: **{weather_description}**")
-        st.markdown(f"🌡️ **{temp}°C**", help=f"Feels like {feels_like}°C!")
-        st.markdown(f"💨 Wind: {wind_speed} m/s")
+        st.markdown(f"Sky: **{weather_description}**")
+        st.markdown(f"**{temp}°C**", help=f"Feels like {feels_like}°C!")
+        st.markdown(f"Wind: {wind_speed} m/s")
+        st.markdown(f"Odds of Rain: can't afford that API key")
+        st.markdown(f"Odds of Aliens: Low",help="But never zero!")
         loc_df = pd.DataFrame({
         "lat": [data['coord']['lat']],
         "lon": [data['coord']['lon']]
