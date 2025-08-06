@@ -2,7 +2,6 @@ import requests
 import pandas as pd
 import streamlit as st
 import datetime
-import pytz
 import time
 
 #page configuration
@@ -16,46 +15,64 @@ st.set_page_config(
 st.image('https://raw.githubusercontent.com/neliahg/only_happy_when_it_x/2c6a999d73f5a0db8556d4f32684ec516ac792d1/assets/backgrounds/weatherx.png')
 
 
-df_cities = pd.read_csv('https://raw.githubusercontent.com/neliahg/only_happy_when_it_x/main/assets/backgrounds/cities_list.csv')
-random_row = df_cities.sample(1)
-lat,lon= random_row['lat'],random_row['lon']
+def local_time(data):
+    timestamp = data["dt"]
+    offset = data["timezone"]
+    utc_time = datetime.datetime.utcfromtimestamp(timestamp)
+    local_time = utc_time + datetime.timedelta(seconds=offset)
+    formatted_time = local_time.strftime("%b %d, %Y, %I:%M %p")
+    st.write(formatted_time)
 
 
 
 def weather(data): #get weather details across all
-    with st.container():
-        st.markdown(f"📍 **{data['name']}, {data['sys']['country']}**")
-        st.write(data["weather"][0]["description"].capitalize())
-        st.write(f"🌡 Temperature: {data['main']['temp']}°C (feels like {data['main']['feels_like']}°C)")
-        st.write(f"💨 Wind: {data['wind']['speed']} m/s")
 
-        city_name = data["name"]
-        country = data["sys"]["country"]
-        weather_description = data["weather"][0]["description"].capitalize()
-        temp = data["main"]["temp"]
-        feels_like = data["main"]["feels_like"]
-        wind_speed = data["wind"]["speed"]
-        icon_code = data["weather"][0]["icon"]
-        icon_url = f"http://openweathermap.org/img/wn/{icon_code}@2x.png"
+    city_name = data["name"]
+    country = data["sys"]["country"]
+    weather_description = data["weather"][0]["description"].capitalize()
+    temp = data["main"]["temp"]
+    feels_like = data["main"]["feels_like"]
+    wind_speed = data["wind"]["speed"]
+    icon_code = data["weather"][0]["icon"]
+    icon_url = f"http://openweathermap.org/img/wn/{icon_code}@2x.png"
 
-        with st.container(border=True):
-            col1, col2 = st.columns([1, 3])
+    with st.container(border=True):
+        col1, col2 = st.columns([0.5,0.5])
+        with col1:
+            st.markdown(
+                f"""
+                            <div style="width: 100%; height: 100%; display: flex; justify-content: left; align-items: left; text-align: left;">
+                                <span style="font-weight: bold; font-size: 25px; text-transform: uppercase;">
+                                    📍 {city_name}, {country}
+                                </span>
+                            </div>
+                            """,
+                unsafe_allow_html=True
+            )
+            local_time(data)
 
-            with col1:
-                st.image(icon_url, width=80)
+        with col2:
+            st.markdown(
+                f"""
+                           <div style="display: flex; justify-content: right; align-items: center;">
+                               <img src="{icon_url}"/>
+                           </div>
+                           """,
+                unsafe_allow_html=True
+            )
 
-            with col2:
-                st.markdown(f"### 📍 {city_name}, {country}")
-                st.markdown(f"**{weather_description}**")
-                st.markdown(f"🌡️ **{temp}°C** *(feels like {feels_like}°C)*")
-                st.markdown(f"💨 Wind: {wind_speed} m/s")
 
-        # Optional: show map below
+
+        st.markdown(f"☁️ Weather: **{weather_description}**")
+        st.markdown(f"🌡️ **{temp}°C**", help=f"Feels like {feels_like}°C!")
+        st.markdown(f"💨 Wind: {wind_speed} m/s")
         loc_df = pd.DataFrame({
-            "lat": [data['coord']['lat']],
-            "lon": [data['coord']['lon']]
+        "lat": [data['coord']['lat']],
+        "lon": [data['coord']['lon']]
         })
         st.map(loc_df, zoom=8)
+
+
 def cityweather(city):
     api_key = st.secrets["openweather"]["api_key"]
     url = "http://api.openweathermap.org/data/2.5/weather"
@@ -75,8 +92,6 @@ def cityweather(city):
     else:
         st.error(f"{response.status_code}: {response.json().get('message')}")
         return None
-
-
 def rand_weather():
     df_cities = pd.read_csv('https://raw.githubusercontent.com/neliahg/only_happy_when_it_x/main/assets/backgrounds/cities_list.csv')
     random_row = df_cities.sample(1)
@@ -103,8 +118,6 @@ def rand_weather():
     else:
         st.error(f"{response.status_code}: {response.json().get('message')}")
         return None
-
-
 def ipweather():  #based on ip address
     ip_info = requests.get("https://ipinfo.io/json").json()
     city = ip_info.get("city")
@@ -162,7 +175,6 @@ elif feeling_lucky:
     with st.spinner(f"Searching Weather X for a **RANDOM** location..."):
         time.sleep(3)
     rand_weather()
-
 elif go_home:
     with st.spinner(f"Searching Weather X for a **YOUR** IP location..."):
         time.sleep(3)
