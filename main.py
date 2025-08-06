@@ -12,7 +12,7 @@ st.set_page_config(
     layout="centered"
 )
 
-st.image('https://raw.githubusercontent.com/neliahg/only_happy_when_it_x/2c6a999d73f5a0db8556d4f32684ec516ac792d1/assets/backgrounds/weatherx.png')
+st.image('https://raw.githubusercontent.com/neliahg/only_happy_when_it_x/refs/heads/main/assets/backgrounds/weatherx-smaller.png')
 
 
 def local_time(data):
